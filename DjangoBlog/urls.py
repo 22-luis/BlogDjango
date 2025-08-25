@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 
-import Blog
+from Blog import urls
 
 urlpatterns = [
-    path('blog/', include("Blog.urls")),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+
+    path('api/', include('Blog.urls', namespace='blog')),
 ]

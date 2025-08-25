@@ -1,13 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from ..models.post import Post
+from ..serializers.post import PostSerializer
 
-from Blog.models.post import Post
+class PostList(APIView):
 
+    permission_classes = [AllowAny]
 
-def index(request):
-    latest_post_list = Post.objects.order_by("date")[:5]
-    context = {"latest_post_list": latest_post_list}
-    return render(request, "blog/index.html", context)
-
-def detail(request, post_id):
-    post  = get_object_or_404(Post, pk=post_id)
-    return render(request, "blog/detail.html", {"post": post})
+    def get(self, request):
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
